@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Reorder } from "framer-motion";
 import TodoHeader from "./TodoHeader";
 import TodoItem from "./TodoItem";
 import "./TodoList.css";
@@ -26,11 +27,16 @@ function App() {
   return (
     <div className="todo-container">
       <TodoHeader addTodo={addTodo} />
-      <ul className="todo-list">
+      <Reorder.Group
+        axis="y"
+        values={todos}
+        onReorder={setTodos}
+        className="todo-list"
+      >
         {todos.map((todo) => (
           <TodoItem key={todo.id} todo={todo} removeTodo={removeTodo} />
         ))}
-      </ul>
+      </Reorder.Group>
     </div>
   );
 }
