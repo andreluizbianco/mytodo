@@ -1,7 +1,7 @@
 import React from "react";
 import { Reorder, useDragControls } from "framer-motion";
 
-const TodoItem = ({ todo, removeTodo }) => {
+const TodoItem = ({ todo, removeTodo, selectTodo, isSelected }) => {
   const dragControls = useDragControls();
 
   return (
@@ -10,13 +10,18 @@ const TodoItem = ({ todo, removeTodo }) => {
       id={todo.id.toString()}
       dragListener={false}
       dragControls={dragControls}
-      whileDrag={{ scale: 1.05, boxShadow: "0 3px 6px rgba(0,0,0,0.1)" }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      <div className="todo-item" onPointerDown={(e) => dragControls.start(e)}>
+      <div
+        className={`todo-item ${isSelected ? "selected" : ""}`}
+        onPointerDown={(e) => dragControls.start(e)}
+        onClick={() => selectTodo(todo)}
+      >
         <span>{todo.text}</span>
         <button
-          onClick={() => removeTodo(todo.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            removeTodo(todo.id);
+          }}
           className="todo-delete-button"
         >
           <svg
