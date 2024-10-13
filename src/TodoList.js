@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TodoList.css";
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    // Move the localStorage retrieval to the initial state
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    }
+    return [];
+  });
   const [newTodo, setNewTodo] = useState("");
+
+  useEffect(() => {
+    console.log("Saving todos to localStorage:", todos);
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (newTodo.trim() !== "") {
-      setTodos([...todos, { id: Date.now(), text: newTodo.trim() }]);
+      const updatedTodos = [...todos, { id: Date.now(), text: newTodo.trim() }];
+      setTodos(updatedTodos);
       setNewTodo("");
+      console.log("Todo added, new todos:", updatedTodos);
     }
   };
 
   const removeTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    console.log("Todo removed, new todos:", updatedTodos);
   };
+
+  console.log("Current todos:", todos);
 
   return (
     <div className="todo-container">
