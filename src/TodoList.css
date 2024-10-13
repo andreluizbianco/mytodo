@@ -62,6 +62,13 @@
   background-color: #f3f4f6;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;
+  cursor: grab;
+  user-select: none;
+}
+
+.todo-item:active {
+  cursor: grabbing;
+  background-color: #e5e7eb;
 }
 
 .todo-delete-button {
