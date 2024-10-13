@@ -92,6 +92,17 @@
   border-radius: 0.25rem;
   padding: 1rem;
   height: 100%;
+  min-height: 150px;
+  outline: none;
+}
+
+.todo-item-note:focus {
+  border: 1px solid #d1d5db;
+}
+
+.todo-item-note:empty:before {
+  content: "Click to add a note...";
+  color: #9ca3af;
 }
 
 .todo-item-note textarea {
