@@ -67,7 +67,9 @@ function App() {
           {selectedTodo && (
             <TodoItemNote
               note={selectedTodo}
-              updateNote={(text) => updateTodoNote(selectedTodo.id, text)}
+              updateNote={(noteText) =>
+                updateTodoNote(selectedTodo.id, noteText)
+              }
             />
           )}
         </div>
