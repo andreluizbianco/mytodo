@@ -1,8 +1,51 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Reorder, useDragControls } from "framer-motion";
 
-const TodoItem = ({ todo, removeTodo, selectTodo, isSelected }) => {
+const TodoItem = ({ todo, removeTodo, selectTodo, isSelected, updateTodo }) => {
   const dragControls = useDragControls();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(todo.text);
+  const editableSpanRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      editableSpanRef.current.focus();
+      // Place the cursor at the end of the text
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.setStart(editableSpanRef.current.childNodes[0], editedText.length);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  }, [isEditing, editedText]);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleInput = (e) => {
+    setEditedText(e.target.innerText);
+  };
+
+  const handleBlur = () => {
+    if (editedText.trim() !== "") {
+      updateTodo(todo.id, editedText.trim());
+    } else {
+      setEditedText(todo.text); // Revert to original text if empty
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleBlur();
+    } else if (e.key === "Escape") {
+      setEditedText(todo.text);
+      setIsEditing(false);
+    }
+  };
 
   return (
     <Reorder.Item
@@ -12,11 +55,24 @@ const TodoItem = ({ todo, removeTodo, selectTodo, isSelected }) => {
       dragControls={dragControls}
     >
       <div
-        className={`todo-item ${isSelected ? "selected" : ""}`}
-        onPointerDown={(e) => dragControls.start(e)}
-        onClick={() => selectTodo(todo)}
+        className={`todo-item ${isSelected ? "selected" : ""} ${
+          isEditing ? "editing" : ""
+        }`}
+        onPointerDown={(e) => !isEditing && dragControls.start(e)}
+        onClick={() => !isEditing && selectTodo(todo)}
+        onDoubleClick={handleDoubleClick}
       >
-        <span>{todo.text}</span>
+        <span
+          ref={editableSpanRef}
+          contentEditable={isEditing}
+          onInput={handleInput}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          suppressContentEditableWarning={true}
+          className="todo-text"
+        >
+          {todo.text}
+        </span>
         <button
           onClick={(e) => {
             e.stopPropagation();
