@@ -12,6 +12,8 @@ function App() {
 
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [activeView, setActiveView] = useState("notes");
+  const [deleteClickCount, setDeleteClickCount] = useState(0);
+  const [deleteClickTimeout, setDeleteClickTimeout] = useState(null);
 
   const colors = ["red", "yellow", "green", "blue"];
 
@@ -26,9 +28,19 @@ function App() {
   };
 
   const removeTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-    if (selectedTodo && selectedTodo.id === id) {
-      setSelectedTodo(null);
+    if (deleteClickCount === 0) {
+      setDeleteClickCount(1);
+      const timeout = setTimeout(() => {
+        setDeleteClickCount(0);
+      }, 300);
+      setDeleteClickTimeout(timeout);
+    } else {
+      clearTimeout(deleteClickTimeout);
+      setDeleteClickCount(0);
+      setTodos(todos.filter((todo) => todo.id !== id));
+      if (selectedTodo && selectedTodo.id === id) {
+        setSelectedTodo(null);
+      }
     }
   };
 
@@ -195,7 +207,9 @@ function App() {
                     <line x1="10" y1="11" x2="10" y2="17"></line>
                     <line x1="14" y1="11" x2="14" y2="17"></line>
                   </svg>
-                  Delete Todo
+                  {deleteClickCount === 0
+                    ? "Delete Todo"
+                    : "Click again to delete"}
                 </button>
               </div>
             )}
