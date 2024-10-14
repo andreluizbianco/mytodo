@@ -43,6 +43,15 @@ function App() {
     }
   };
 
+  const updateTodo = (id, newText) => {
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo))
+    );
+    if (selectedTodo && selectedTodo.id === id) {
+      setSelectedTodo({ ...selectedTodo, text: newText });
+    }
+  };
+
   return (
     <div className="todo-container">
       <TodoHeader addTodo={addTodo} />
@@ -60,6 +69,7 @@ function App() {
               removeTodo={removeTodo}
               selectTodo={selectTodo}
               isSelected={selectedTodo && selectedTodo.id === todo.id}
+              updateTodo={updateTodo}
             />
           ))}
         </Reorder.Group>

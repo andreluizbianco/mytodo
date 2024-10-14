@@ -61,6 +61,22 @@
   margin-right: 1rem;
 }
 
+.todo-text {
+  flex-grow: 1;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  outline: none;
+}
+
+.todo-item.editing .todo-text {
+  cursor: text;
+  user-select: text;
+}
+
+.todo-item.editing .todo-text:focus {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
 .todo-note-container {
   width: 60%;
 }
@@ -130,4 +146,22 @@
 .trash-icon {
   width: 1rem;
   height: 1rem;
+}
+
+.todo-edit-input {
+  width: 100%;
+  padding: 0.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.todo-edit-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.todo-item.editing {
+  cursor: text;
 }
