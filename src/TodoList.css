@@ -96,21 +96,26 @@
 }
 
 .todo-delete-button {
-  background: none;
+  display: flex;
+  align-items: center;
+  background-color: #ef4444;
+  color: white;
   border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
-  padding: 0.2rem;
-  color: #6b7280;
-  transition: color 0.2s;
+  transition: background-color 0.2s;
+  font-size: 0.85rem;
 }
 
 .todo-delete-button:hover {
-  color: #ef4444;
+  background-color: #dc2626;
 }
 
 .trash-icon {
-  width: 0.85rem;
-  height: 0.85rem;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
 }
 
 .note-header {
@@ -167,15 +172,27 @@
 }
 
 .settings-placeholder {
-  background-color: #f9fafb;
-  border-radius: 0.25rem;
-  padding: 0.5rem;
-  height: 100%;
-  min-height: 120px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-style: italic;
+  height: 100%;
   color: #6b7280;
+  font-style: italic;
   font-size: 0.85rem;
+}
+
+.settings-content {
+  background-color: #f9fafb;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  height: 100%;
+  min-height: 120px;
+}
+
+.settings-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #4b5563;
 }
