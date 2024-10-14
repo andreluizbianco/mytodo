@@ -13,12 +13,14 @@ function App() {
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [activeView, setActiveView] = useState("notes");
 
+  const colors = ["red", "yellow", "green", "blue"];
+
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = () => {
-    const newTodo = { id: Date.now(), text: "", note: "" };
+    const newTodo = { id: Date.now(), text: "", note: "", color: "" };
     setTodos([...todos, newTodo]);
     setSelectedTodo(newTodo);
   };
@@ -49,6 +51,13 @@ function App() {
     );
     if (selectedTodo && selectedTodo.id === id) {
       setSelectedTodo({ ...selectedTodo, text: newText });
+    }
+  };
+
+  const updateTodoColor = (id, color) => {
+    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, color } : todo)));
+    if (selectedTodo && selectedTodo.id === id) {
+      setSelectedTodo({ ...selectedTodo, color });
     }
   };
 
@@ -154,6 +163,17 @@ function App() {
             {activeView === "settings" && selectedTodo && (
               <div className="settings-content">
                 <h3>Todo Settings</h3>
+                <div className="color-palette">
+                  {colors.map((color) => (
+                    <button
+                      key={color}
+                      className={`color-button ${color} ${
+                        selectedTodo.color === color ? "selected" : ""
+                      }`}
+                      onClick={() => updateTodoColor(selectedTodo.id, color)}
+                    ></button>
+                  ))}
+                </div>
                 <button
                   onClick={() => removeTodo(selectedTodo.id)}
                   className="todo-delete-button"
