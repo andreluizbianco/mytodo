@@ -1,22 +1,40 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Reorder, useDragControls } from "framer-motion";
 
-const TodoItem = ({ todo, removeTodo, selectTodo, isSelected, updateTodo }) => {
+const TodoItem = ({
+  todo,
+  removeTodo,
+  selectTodo,
+  isSelected,
+  updateTodo,
+  isEditing: isEditingProp,
+}) => {
   const dragControls = useDragControls();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isEditingProp);
   const [editedText, setEditedText] = useState(todo.text);
   const editableSpanRef = useRef(null);
 
   useEffect(() => {
+    setIsEditing(isEditingProp);
+  }, [isEditingProp]);
+
+  useEffect(() => {
     if (isEditing) {
       editableSpanRef.current.focus();
-      // Place the cursor at the end of the text
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.setStart(editableSpanRef.current.childNodes[0], editedText.length);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
+      if (editedText.length > 0) {
+        // Only set cursor position if there's text
+        const range = document.createRange();
+        const sel = window.getSelection();
+        if (editableSpanRef.current.childNodes.length > 0) {
+          range.setStart(
+            editableSpanRef.current.childNodes[0],
+            editedText.length
+          );
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
     }
   }, [isEditing, editedText]);
 
@@ -71,7 +89,7 @@ const TodoItem = ({ todo, removeTodo, selectTodo, isSelected, updateTodo }) => {
           suppressContentEditableWarning={true}
           className="todo-text"
         >
-          {todo.text}
+          {editedText || (isEditing ? "" : "New Todo")}
         </span>
         <button
           onClick={(e) => {

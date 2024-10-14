@@ -32,14 +32,23 @@
   margin-right: 0.5rem;
 }
 
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .todo-add-button {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
   background-color: #2563eb;
   color: white;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -49,9 +58,8 @@
 }
 
 .plus-icon {
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .todo-list {
