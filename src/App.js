@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Reorder } from "framer-motion";
-import TodoHeader from "./TodoHeader";
 import TodoItem from "./TodoItem";
 import TodoItemNote from "./TodoItemNote";
 import "./TodoList.css";
@@ -17,10 +16,10 @@ function App() {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  const addTodo = (text) => {
-    if (text.trim() !== "") {
-      setTodos([...todos, { id: Date.now(), text: text.trim(), note: "" }]);
-    }
+  const addTodo = () => {
+    const newTodo = { id: Date.now(), text: "", note: "" };
+    setTodos([...todos, newTodo]);
+    setSelectedTodo(newTodo);
   };
 
   const removeTodo = (id) => {
@@ -54,7 +53,24 @@ function App() {
 
   return (
     <div className="todo-container">
-      <TodoHeader addTodo={addTodo} />
+      <div className="todo-header">
+        <h1 className="todo-title">Todo List</h1>
+        <button onClick={addTodo} className="todo-add-button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="plus-icon"
+          >
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
       <div className="todo-content">
         <Reorder.Group
           axis="y"
@@ -70,6 +86,9 @@ function App() {
               selectTodo={selectTodo}
               isSelected={selectedTodo && selectedTodo.id === todo.id}
               updateTodo={updateTodo}
+              isEditing={
+                selectedTodo && selectedTodo.id === todo.id && todo.text === ""
+              }
             />
           ))}
         </Reorder.Group>
