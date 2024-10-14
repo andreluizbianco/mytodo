@@ -73,7 +73,7 @@ const TodoItem = ({
       <div
         className={`todo-item ${isSelected ? "selected" : ""} ${
           isEditing ? "editing" : ""
-        }`}
+        } ${todo.color}`}
         onPointerDown={(e) => !isEditing && dragControls.start(e)}
         onClick={() => !isEditing && selectTodo(todo)}
         onDoubleClick={handleDoubleClick}
