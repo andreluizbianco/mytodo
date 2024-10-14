@@ -1,7 +1,7 @@
 .todo-container {
   max-width: 400px;
   margin: 2rem auto;
-  padding: 1.5rem;
+  padding: 1rem;
   background-color: white;
   border-radius: 0.5rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -9,42 +9,30 @@
 
 .todo-content {
   display: flex;
-  margin-top: 1rem;
 }
 
-.todo-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #1f2937;
+.todo-items-column {
+  width: 40%;
+  margin-right: 0.75rem;
 }
 
-.todo-input-container {
+.todo-note-column {
+  width: 60%;
+}
+
+.add-button-container {
   display: flex;
-  margin-bottom: 1rem;
-}
-
-.todo-input {
-  flex-grow: 1;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  margin-right: 0.5rem;
-}
-
-.todo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 0.75rem;
 }
 
 .todo-add-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2rem;
+  height: 2rem;
   background-color: #2563eb;
   color: white;
   border: none;
@@ -58,20 +46,42 @@
 }
 
 .plus-icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .todo-list {
   list-style-type: none;
   padding: 0;
-  width: 40%;
-  margin-right: 1rem;
+  width: 100%;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem;
+  background-color: #f3f4f6;
+  border-radius: 0.25rem;
+  margin-bottom: 0.35rem;
+  cursor: grab;
+  user-select: none;
+  font-size: 0.85rem;
+}
+
+.todo-item:active {
+  cursor: grabbing;
+  background-color: #e5e7eb;
+}
+
+.todo-item.selected {
+  background-color: #e5e7eb;
+  border-left: 2px solid #3b82f6;
 }
 
 .todo-text {
   flex-grow: 1;
-  padding: 0.25rem;
+  padding: 0.2rem;
   border-radius: 0.25rem;
   outline: none;
 }
@@ -85,39 +95,66 @@
   background-color: rgba(59, 130, 246, 0.1);
 }
 
-.todo-note-container {
-  width: 60%;
+.todo-delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem;
+  color: #6b7280;
+  transition: color 0.2s;
 }
 
-.todo-item {
+.todo-delete-button:hover {
+  color: #ef4444;
+}
+
+.trash-icon {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.note-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  background-color: #f3f4f6;
-  border-radius: 0.25rem;
+  justify-content: flex-start;
   margin-bottom: 0.5rem;
-  cursor: grab;
-  user-select: none;
 }
 
-.todo-item:active {
-  cursor: grabbing;
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-right: 0.35rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+  background-color: #f3f4f6;
+}
+
+.icon-button.active {
   background-color: #e5e7eb;
 }
 
-.todo-item.selected {
-  background-color: #e5e7eb;
-  border-left: 3px solid #3b82f6;
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #4b5563;
+}
+
+.note-content {
+  flex-grow: 1;
 }
 
 .todo-item-note {
   background-color: #f9fafb;
   border-radius: 0.25rem;
-  padding: 1rem;
+  padding: 0.5rem;
   height: 100%;
-  min-height: 150px;
+  min-height: 120px;
   outline: none;
+  font-size: 0.85rem;
 }
 
 .todo-item-note:focus {
@@ -129,47 +166,16 @@
   color: #9ca3af;
 }
 
-.todo-item-note textarea {
-  width: 100%;
-  min-height: 150px;
-  border: 1px solid #d1d5db;
+.settings-placeholder {
+  background-color: #f9fafb;
   border-radius: 0.25rem;
   padding: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-.todo-delete-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
+  height: 100%;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
   color: #6b7280;
-  transition: color 0.2s;
-}
-
-.todo-delete-button:hover {
-  color: #ef4444;
-}
-
-.trash-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-.todo-edit-input {
-  width: 100%;
-  padding: 0.25rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-}
-
-.todo-edit-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-}
-
-.todo-item.editing {
-  cursor: text;
+  font-size: 0.85rem;
 }
