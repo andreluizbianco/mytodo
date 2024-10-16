@@ -7,6 +7,7 @@ import "./TodoList.css";
 function App() {
   const {
     todos,
+    setTodos,
     archivedTodos,
     addTodo,
     updateTodo,
@@ -22,6 +23,7 @@ function App() {
       <div className="todo-content">
         <TodoList
           todos={todos}
+          setTodos={setTodos}
           addTodo={addTodo}
           updateTodo={updateTodo}
           selectedTodo={selectedTodo}

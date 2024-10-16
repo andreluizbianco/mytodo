@@ -20,7 +20,13 @@ export const useTodos = () => {
   }, [archivedTodos]);
 
   const addTodo = () => {
-    const newTodo = { id: Date.now(), text: "New Todo", note: "", color: "" };
+    const newTodo = {
+      id: Date.now(),
+      text: "",
+      note: "",
+      color: "",
+      isEditing: true,
+    };
     setTodos([...todos, newTodo]);
     return newTodo;
   };
@@ -38,7 +44,10 @@ export const useTodos = () => {
   const archiveTodo = (id) => {
     const todoToArchive = todos.find((todo) => todo.id === id);
     if (todoToArchive) {
-      setArchivedTodos([...archivedTodos, { ...todoToArchive }]);
+      setArchivedTodos([
+        ...archivedTodos,
+        { ...todoToArchive, isEditing: false },
+      ]);
       setTodos(todos.filter((todo) => todo.id !== id));
     }
   };
@@ -46,13 +55,14 @@ export const useTodos = () => {
   const unarchiveTodo = (id) => {
     const todoToUnarchive = archivedTodos.find((todo) => todo.id === id);
     if (todoToUnarchive) {
-      setTodos([...todos, { ...todoToUnarchive }]);
+      setTodos([...todos, { ...todoToUnarchive, isEditing: false }]);
       setArchivedTodos(archivedTodos.filter((todo) => todo.id !== id));
     }
   };
 
   return {
     todos,
+    setTodos,
     archivedTodos,
     addTodo,
     updateTodo,

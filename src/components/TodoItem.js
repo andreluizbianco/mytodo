@@ -9,16 +9,16 @@ const TodoItem = ({
   isEditing: isEditingProp,
 }) => {
   const dragControls = useDragControls();
-  const [isEditing, setIsEditing] = useState(isEditingProp);
-  const [editedText, setEditedText] = useState(todo.text || "New Todo");
+  const [isEditing, setIsEditing] = useState(isEditingProp || todo.isEditing);
+  const [editedText, setEditedText] = useState(todo.text);
   const editableSpanRef = useRef(null);
 
   useEffect(() => {
-    setIsEditing(isEditingProp);
-  }, [isEditingProp]);
+    setIsEditing(isEditingProp || todo.isEditing);
+  }, [isEditingProp, todo.isEditing]);
 
   useEffect(() => {
-    setEditedText(todo.text || "New Todo");
+    setEditedText(todo.text);
   }, [todo.text]);
 
   useEffect(() => {
@@ -49,10 +49,10 @@ const TodoItem = ({
   };
 
   const handleBlur = () => {
-    if (editedText.trim() !== "") {
-      updateTodo(todo.id, { text: editedText.trim() });
+    if (editedText.trim() !== "" || !todo.isEditing) {
+      updateTodo(todo.id, { text: editedText.trim(), isEditing: false });
     } else {
-      setEditedText(todo.text || "New Todo");
+      setEditedText("");
     }
     setIsEditing(false);
   };
@@ -62,8 +62,9 @@ const TodoItem = ({
       e.preventDefault();
       handleBlur();
     } else if (e.key === "Escape") {
-      setEditedText(todo.text || "New Todo");
+      setEditedText(todo.text);
       setIsEditing(false);
+      updateTodo(todo.id, { isEditing: false });
     }
   };
 

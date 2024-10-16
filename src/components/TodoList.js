@@ -4,15 +4,21 @@ import TodoItem from "./TodoItem";
 
 const TodoList = ({
   todos,
+  setTodos,
   addTodo,
   updateTodo,
   selectedTodo,
   setSelectedTodo,
 }) => {
+  const handleAddTodo = () => {
+    const newTodo = addTodo();
+    setSelectedTodo(newTodo);
+  };
+
   return (
     <div className="todo-items-column">
       <div className="add-button-container">
-        <button onClick={addTodo} className="todo-add-button">
+        <button onClick={handleAddTodo} className="todo-add-button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -31,7 +37,7 @@ const TodoList = ({
       <Reorder.Group
         axis="y"
         values={todos}
-        onReorder={updateTodo}
+        onReorder={setTodos}
         className="todo-list"
       >
         {todos.map((todo) => (
@@ -41,9 +47,7 @@ const TodoList = ({
             selectTodo={setSelectedTodo}
             isSelected={selectedTodo && selectedTodo.id === todo.id}
             updateTodo={updateTodo}
-            isEditing={
-              selectedTodo && selectedTodo.id === todo.id && todo.text === ""
-            }
+            isEditing={todo.isEditing}
           />
         ))}
       </Reorder.Group>
