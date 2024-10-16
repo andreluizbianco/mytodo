@@ -10,6 +10,11 @@ function App() {
     return savedTodos ? JSON.parse(savedTodos) : [];
   });
 
+  const [archivedTodos, setArchivedTodos] = useState(() => {
+    const savedArchivedTodos = localStorage.getItem("archivedTodos");
+    return savedArchivedTodos ? JSON.parse(savedArchivedTodos) : [];
+  });
+
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [activeView, setActiveView] = useState("notes");
   const [deleteClickCount, setDeleteClickCount] = useState(0);
@@ -20,6 +25,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
+
+  useEffect(() => {
+    localStorage.setItem("archivedTodos", JSON.stringify(archivedTodos));
+  }, [archivedTodos]);
 
   const addTodo = () => {
     const newTodo = { id: Date.now(), text: "", note: "", color: "" };
@@ -70,6 +79,25 @@ function App() {
     setTodos(todos.map((todo) => (todo.id === id ? { ...todo, color } : todo)));
     if (selectedTodo && selectedTodo.id === id) {
       setSelectedTodo({ ...selectedTodo, color });
+    }
+  };
+
+  const archiveTodo = (id) => {
+    const todoToArchive = todos.find((todo) => todo.id === id);
+    if (todoToArchive) {
+      setArchivedTodos([...archivedTodos, todoToArchive]);
+      setTodos(todos.filter((todo) => todo.id !== id));
+      if (selectedTodo && selectedTodo.id === id) {
+        setSelectedTodo(null);
+      }
+    }
+  };
+
+  const unarchiveTodo = (id) => {
+    const todoToUnarchive = archivedTodos.find((todo) => todo.id === id);
+    if (todoToUnarchive) {
+      setTodos([...todos, todoToUnarchive]);
+      setArchivedTodos(archivedTodos.filter((todo) => todo.id !== id));
     }
   };
 
@@ -162,6 +190,28 @@ function App() {
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
               </svg>
             </button>
+            <button
+              className={`icon-button ${
+                activeView === "archive" ? "active" : ""
+              }`}
+              onClick={() => setActiveView("archive")}
+              title="Archive"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon"
+              >
+                <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                <rect x="1" y="3" width="22" height="5"></rect>
+                <line x1="10" y1="12" x2="14" y2="12"></line>
+              </svg>
+            </button>
           </div>
           <div className="note-content">
             {activeView === "notes" && selectedTodo && (
@@ -187,6 +237,28 @@ function App() {
                   ))}
                 </div>
                 <button
+                  onClick={() => archiveTodo(selectedTodo.id)}
+                  className="todo-archive-button"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="archive-icon"
+                  >
+                    <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                    <rect x="1" y="3" width="22" height="5"></rect>
+                    <line x1="10" y1="12" x2="14" y2="12"></line>
+                  </svg>
+                  Archive Todo
+                </button>
+                <button
                   onClick={() => removeTodo(selectedTodo.id)}
                   className="todo-delete-button"
                 >
@@ -211,6 +283,24 @@ function App() {
                     ? "Delete Todo"
                     : "Click again to delete"}
                 </button>
+              </div>
+            )}
+            {activeView === "archive" && (
+              <div className="archive-content">
+                <h3>Archived Todos</h3>
+                <ul className="archived-todo-list">
+                  {archivedTodos.map((todo) => (
+                    <li key={todo.id} className="archived-todo-item">
+                      <span>{todo.text}</span>
+                      <button
+                        onClick={() => unarchiveTodo(todo.id)}
+                        className="unarchive-button"
+                      >
+                        Unarchive
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
