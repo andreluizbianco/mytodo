@@ -9,13 +9,17 @@ const TodoItem = ({
   isEditing: isEditingProp,
 }) => {
   const dragControls = useDragControls();
-  const [isEditing, setIsEditing] = useState(isEditingProp);
+  const [isEditing, setIsEditing] = useState(isEditingProp || todo.isEditing);
   const [editedText, setEditedText] = useState(todo.text);
   const editableSpanRef = useRef(null);
 
   useEffect(() => {
-    setIsEditing(isEditingProp);
-  }, [isEditingProp]);
+    setIsEditing(isEditingProp || todo.isEditing);
+  }, [isEditingProp, todo.isEditing]);
+
+  useEffect(() => {
+    setEditedText(todo.text);
+  }, [todo.text]);
 
   useEffect(() => {
     if (isEditing) {
@@ -45,10 +49,10 @@ const TodoItem = ({
   };
 
   const handleBlur = () => {
-    if (editedText.trim() !== "") {
-      updateTodo(todo.id, editedText.trim());
+    if (editedText.trim() !== "" || !todo.isEditing) {
+      updateTodo(todo.id, { text: editedText.trim(), isEditing: false });
     } else {
-      setEditedText(todo.text);
+      setEditedText("");
     }
     setIsEditing(false);
   };
@@ -60,6 +64,7 @@ const TodoItem = ({
     } else if (e.key === "Escape") {
       setEditedText(todo.text);
       setIsEditing(false);
+      updateTodo(todo.id, { isEditing: false });
     }
   };
 
@@ -87,7 +92,7 @@ const TodoItem = ({
           suppressContentEditableWarning={true}
           className="todo-text"
         >
-          {editedText || (isEditing ? "" : "New Todo")}
+          {editedText}
         </span>
       </div>
     </Reorder.Item>
